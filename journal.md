@@ -120,6 +120,38 @@ After remounting, chroot and more googling, I added `GRUB_SAVEDEFAULT=false` to 
 A `sync && reboot` booted successfully!
 
 ## System <br />
+
+### Moving the installation across drives with clonezilla <br />
+I used Linux now exclusively on my dual-boot machine with Windows for three months. 
+Deciding I want to get rid of Windows and use the prescious SSD space on my more write-endurable for my Linux instead.
+
+In preparation to cloning partitions, I had to delete any partition on nvme1n1, and create three partitions of the same size (could also have been bigger).
+
+In Clonezilla using a part-to-part clone, making sure you select the right partition for the right things makes the cloning a breeze.
+The only "issue" there is then that the partitions have the exact same UUID or Identifier. This means that from boot to boot the mounted partitions will be different. Often across drives.
+As it seems the drive selected in BIOS will contain the mounted boot partition.
+
+I changed the UUID of the `boot` and `fedora` partition (the UUID of a FAT partition is only inferred upon creation and can not be changed), to make them different from the others, and changed the boot priority in BIOS to match the drive selection.
+**Don't forget to change `/etc/fstab` accordingly on the new partition**
+After booting, I verified that all partitions worked, and deleted the EFI partition and verified again.
+
+All partitions working, I deleted the "old" `boot` and `fedora`. And my sytem was transferred successfully!
+
+### Moving `/home` to a different partition
+
+Copy home to a backup location 
+
+```
+# rsync -aXs /home/. /path/to/destination/. --exclude='/*/.gvfs'
+```
+
+.gvfs is a file automatically created by gnome, and has been known to cause trouble in the past - excluding it is a safe bet and won't hurt.
+
+Create a new partition for the home folder.
+Copy the home folder with the same command.
+Edit `/etc/fstab`, with the `/home` mountpoint now pointing to the new partition.
+
+
 ### Autostart <br />
 
 There is a way to autostart apps / execute commands at login, but it seems kind of difficult.
