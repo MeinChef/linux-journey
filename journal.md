@@ -8,7 +8,7 @@ I also used this opportunity to put my /home folder into a different partition.
 Following that - to verify everything is working, I booted my system several times.
 For some reason, when booting it up the next day, I found myself in GRUB, unable to boot.
 
-[This Blog was extremely helpful when trying to troubleshoot](https://www.linuxfoundation.org/blog/blog/classic-sysadmin-how-to-rescue-a-non-booting-grub-2-on-linux)<br />
+[This Blog](https://www.linuxfoundation.org/blog/blog/classic-sysadmin-how-to-rescue-a-non-booting-grub-2-on-linux) and [this question thread](https://askubuntu.com/questions/883992/stuck-at-grub-command-line)  were extremely helpful when trying to troubleshoot<br />
 At first I tried booting from GRUB, where I tried to manually select the root partition.
 To have a look at all available Partitions, Hard drives...
 
