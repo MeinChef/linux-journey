@@ -164,7 +164,61 @@ Use UUID. \
 Spaces in Folder/Drive names are `\040` \
 Useful Tags: 
 - windows_names - enforces Windows Naming on mounted partition, particularly useful for NTFS drives.\
-- x-gvfs-show - adds an icon to the file explorer, to make the partitions easily accessible there.
+- x- - indicates that a command follows
+- x-gvfs-show - adds an icon to the file explorer, to make the partitions easily accessible there.\
+- x-systemd.automount - useful for Network drives, that are not necessarily powered on. - As fstab is being loaded before the network drivers, this allows the drives to be mounted upon user access
+
+### fstab alternatives for Network-Drives
+
+Especially with samba/cifs drives
+
+#### Using Systemd
+Suppose you want to mount the cifs drive in `/home/user/Disks/Sambashare`.
+- create directory
+- create following files at /etc/systemd/system/
+    - home-user-Disks-Sambashare.mount
+    - home-user-Disks-Sambashare.automount
+! The file name need to match the mount point in structure. !
+
+The contents of .mount might be
+
+```
+[Unit]
+Description=mount my share
+
+[Mount]
+What=//server.address.bar/share
+Where=/home/user/Disks/Sambashare
+Type=cifs
+Options=rw,file_mode=0700,dir_mode=0700,uid=1000,user=username,password=sharepwd
+DirectoryMode=0700
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Whereas the .automount might look like this:
+
+```
+[Unit]
+Description=automount my share
+
+[Automount]
+Where=/home/user/mnt/samba
+TimeoutIdleSec=60
+
+[Install]
+WantedBy=multi-user.target
+```
+
+`TimeoutIdleSec` will unmount the share after a period of inactivity
+
+To enable the services, run
+```
+# systemctl daemon-reload
+# systemctl enable home-user-mnt-samba.automount --now
+```
+
 
 ---
 
