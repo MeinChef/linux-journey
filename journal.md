@@ -171,6 +171,7 @@ Useful Tags:
 ### fstab alternatives for Network-Drives
 
 Especially with samba/cifs drives
+[Following this discussion](https://discussion.fedoraproject.org/t/suddenly-user-cifs-mounts-not-supported/78652/11)
 
 #### Using Systemd
 Suppose you want to mount the cifs drive in `/home/user/Disks/Sambashare`.
