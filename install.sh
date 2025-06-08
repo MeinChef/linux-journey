@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# some variables
+STEAM="steam"
+
 # elevated stuff
 sudo /bin/bash << EOF
 	# vscode
@@ -41,3 +45,10 @@ conda config --set auto_activate_base false
 conda create -n snn python=3.12
 conda activate snn
 pip install snntorch
+
+# set some aliases
+if rpm -q "$STEAM" >/dev/null 2>&1; then
+	echo "alias fossilize-log='cat ~/.local/share/Steam/logs/shader_log.txt | grep Still | tail -20'" >> $HOME/.bashrc
+fi
+echo "alias upndown='sudo dnf update && systemctl poweroff'" >> $HOME/.bashrc
+echo "alias update-grub='sudo grub2-mkconfig -o /etc/grub2.cfg'" >> $HOME/.bashrc
