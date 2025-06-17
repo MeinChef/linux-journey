@@ -246,6 +246,21 @@ Affected Games (that I installed and had to move):
 
 You should not mount drives to your home directory, mount them to /media or whatever, and symlink the drives to your `$HOME` directory.
 
+### Fossilize
+Fossilize is a shader-pre caching tool that usually runs in the background, using some of your threads. For me the default was four threads.
+Since this wasn't enough for me, I had a look at various fixes on how to increase the fossilize threads and thus their speed.
+Apparently there is a way to set this as a steam-console parameter (not console parameter), but no straightforward way to have it apply every start.
+People in [this issue](https://github.com/ValveSoftware/steam-for-linux/issues/7283) talk about exactly that and found a way to make it launch-persistent:
+
+If a file, named `steam_dev.cfg` exists in the `~/.local/share/Steam/` folder - great.
+Edit the file and append the key `unShaderBackgroundProcessingThreads x` to it.
+Where x is the amount of threads you want to Steam to use.
+
+In Practice, to create the file and have Steam use 12 Threads, you could execute:
+```
+$ echo "unShaderBackgroundProcessingThreads 12" >> ~/.local/share/Steam/steam_dev.cfg 
+```
+
 ### Proton commands <br />
 Write log: `PROTON_LOG=1 %command%`
 
