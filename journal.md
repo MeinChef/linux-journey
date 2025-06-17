@@ -121,6 +121,13 @@ A `sync && reboot` booted successfully!
 
 ## System <br />
 
+### Useful Aliases
+Just append them to `~/.bashrc`
+```
+alias upndown='sudo dnf update && systemctl poweroff'
+alias update-grub='sudo grub2-mkconfig -o /etc/grub2.cfg'
+```
+
 ### Moving the installation across drives with clonezilla <br />
 I used Linux now exclusively on my dual-boot machine with Windows for three months. 
 Deciding I want to get rid of Windows and use the prescious SSD space on my more write-endurable for my Linux instead.
@@ -150,7 +157,6 @@ Copy home to a backup location
 Create a new partition for the home folder.
 Copy the home folder with the same command.
 Edit `/etc/fstab`, with the `/home` mountpoint now pointing to the new partition.
-
 
 ### Autostart <br />
 
@@ -259,6 +265,12 @@ Where x is the amount of threads you want to Steam to use.
 In Practice, to create the file and have Steam use 12 Threads, you could execute:
 ```
 $ echo "unShaderBackgroundProcessingThreads 12" >> ~/.local/share/Steam/steam_dev.cfg 
+```
+
+To have a look what fossilize is doing currently, have a loook at the `shader_log.txt` at `~/.local/share/Steam/logs/`.
+I found it is useful to have an alias for this scenario (and also because I am paranoid and want to know what the system is doing).
+```
+alias fossilize='cat ~/.local/share/Steam/logs/shader_log.txt | grep Still | tail -20'
 ```
 
 ### Proton commands <br />
