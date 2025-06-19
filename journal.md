@@ -211,7 +211,7 @@ Whereas the .automount might look like this:
 Description=automount my share
 
 [Automount]
-Where=/home/user/mnt/samba
+Where=/home/user/Disks/Sambashare
 TimeoutIdleSec=60
 
 [Install]
@@ -223,7 +223,7 @@ WantedBy=multi-user.target
 To enable the services, run
 ```
 # systemctl daemon-reload
-# systemctl enable home-user-mnt-samba.automount --now
+# systemctl enable home-user-Disks-Sambashare.automount --now
 ```
 
 
