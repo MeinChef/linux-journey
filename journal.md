@@ -123,6 +123,13 @@ A `sync && reboot` booted successfully!
 
 ## System <br />
 
+### Useful Aliases
+Just append them to `~/.bashrc`
+```
+alias upndown='sudo dnf update && systemctl poweroff'
+alias update-grub='sudo grub2-mkconfig -o /etc/grub2.cfg'
+```
+
 ### Moving the installation across drives with clonezilla <br />
 I used Linux now exclusively on my dual-boot machine with Windows for three months. 
 Deciding I want to get rid of Windows and use the prescious SSD space on my more write-endurable for my Linux instead.
@@ -152,7 +159,6 @@ Copy home to a backup location
 Create a new partition for the home folder.
 Copy the home folder with the same command.
 Edit `/etc/fstab`, with the `/home` mountpoint now pointing to the new partition.
-
 
 ### Autostart <br />
 
@@ -209,7 +215,7 @@ Whereas the .automount might look like this:
 Description=automount my share
 
 [Automount]
-Where=/home/user/mnt/samba
+Where=/home/user/Disks/Sambashare
 TimeoutIdleSec=60
 
 [Install]
@@ -221,7 +227,7 @@ WantedBy=multi-user.target
 To enable the services, run
 ```
 # systemctl daemon-reload
-# systemctl enable home-user-mnt-samba.automount --now
+# systemctl enable home-user-Disks-Sambashare.automount --now
 ```
 
 
@@ -267,6 +273,27 @@ Affected Games (that I installed and had to move):
 - [In Sink](https://steamdb.info/app/1858650/)
 
 You should not mount drives to your home directory, mount them to /media or whatever, and symlink the drives to your `$HOME` directory.
+
+### Fossilize
+Fossilize is a shader-pre caching tool that usually runs in the background, using some of your threads. For me the default was four threads.
+Since this wasn't enough for me, I had a look at various fixes on how to increase the fossilize threads and thus their speed.
+Apparently there is a way to set this as a steam-console parameter (not console parameter), but no straightforward way to have it apply every start.
+People in [this issue](https://github.com/ValveSoftware/steam-for-linux/issues/7283) talk about exactly that and found a way to make it launch-persistent:
+
+If a file, named `steam_dev.cfg` exists in the `~/.local/share/Steam/` folder - great.
+Edit the file and append the key `unShaderBackgroundProcessingThreads x` to it.
+Where x is the amount of threads you want to Steam to use.
+
+In Practice, to create the file and have Steam use 12 Threads, you could execute:
+```
+$ echo "unShaderBackgroundProcessingThreads 12" >> ~/.local/share/Steam/steam_dev.cfg 
+```
+
+To have a look what fossilize is doing currently, have a loook at the `shader_log.txt` at `~/.local/share/Steam/logs/`.
+I found it is useful to have an alias for this scenario (and also because I am paranoid and want to know what the system is doing).
+```
+alias fossilize='cat ~/.local/share/Steam/logs/shader_log.txt | grep Still | tail -20'
+```
 
 ### Proton commands <br />
 Write log: `PROTON_LOG=1 %command%`
