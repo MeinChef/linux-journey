@@ -1,5 +1,7 @@
 # This file contains everything I learned during the setup of my new Fedora Workstation System. <br />
 
+---
+
 ## GRUB <br />
 ### GRUB not recognizing root <br />
 After I used Clonezilla to copy my installation from one HardDisk to another, 
@@ -46,8 +48,6 @@ grub> boot
 This, however did not lead to me booting into the OS. The bootup got stuck, and threw me in the emergency console, from which I couldn't recover. (I assume because of non-correct /home or /root)
 
 
----
-
 ### Using a live installation to recreate GRUB config files. <br />
 I refused to give up on my installation, so I found myself browsing the forums, and stumbled upon [this thread](https://discussion.fedoraproject.org/t/repair-reinstall-grub-after-windows-11-update-dual-boot-fedora-f39/113155) <br />
 Here, I should boot a live-system to `chroot` into my original installation - basically bypassing GRUB.
@@ -86,7 +86,7 @@ Aaaand
 # chroot /mnt
 ```
 
-Huzzah! This is basically now the System I wanted to get to :) <br />
+Huzzah! This is basically now the System I wanted to get to \:) <br />
 Now mount the leftovers from `/etc/fstab` with
 
 ```
@@ -119,6 +119,8 @@ I booted, but got still stuck in GRUB. Unable to boot.
 After remounting, chroot and more googling, I added `GRUB_SAVEDEFAULT=false` to `/etc/default/grub`.
 A `sync && reboot` booted successfully!
 
+---
+
 ## System <br />
 
 ### Moving the installation across drives with clonezilla <br />
@@ -137,7 +139,7 @@ After booting, I verified that all partitions worked, and deleted the EFI partit
 
 All partitions working, I deleted the "old" `boot` and `fedora`. And my sytem was transferred successfully!
 
-### Moving `/home` to a different partition
+### Moving `/home` to a different partition <br />
 
 Copy home to a backup location 
 
@@ -157,7 +159,9 @@ Edit `/etc/fstab`, with the `/home` mountpoint now pointing to the new partition
 There is a way to autostart apps / execute commands at login, but it seems kind of difficult.
 See [Stackexchange](https://unix.stackexchange.com/questions/626969/fedora-33-run-command-or-script-at-startup) and [.desktop file-specifications](https://specifications.freedesktop.org/desktop-entry-spec/latest/)
 
----
+[Or under section Gnome](#gnome-autostart)
+
+
 
 ### fstab <br />
 Use UUID. \
@@ -224,30 +228,54 @@ To enable the services, run
 ---
 
 ## Gnome <br />
+
+### Must-Haves<br />
+
+**Gnome Tweaks** 
+An app that adds "Advanced Configuration Settings" (change fonts, themes, window behaviour, shell apperance, etc.)
+```
+# dnf install gnome-tweaks
+```
+
+**Gnome-Extensions**
+An app that provides various customizations and extensions to the Gnome-Environment. All Extensions are avaliable [here](https://extensions.gnome.org/).
+
+Easiest to install via Gnome Software.
+
+
+<a name="gnome-autostart">
+
 ### Autostart <br />
 
-Autostarting apps, the easiest is to install Gnome-Tweaks and Gnome-Extensions-app. For managing the extensions, the gnome extensions manager is advised.
-[list of extensions](https://extensions.gnome.org/)
+</a>
 
----
+Autostarting apps, the easiest is to install [Gnome-Tweaks](#must-haves). 
 
 ### Usericon
 The user-icon on the lock-screen is located at `/var/lib/AccountService/icons`. The path to said icon is specified in `/var/lib/AccountService/user/`
 
----
+### Customization
+[A useful list of nice extensions](https://www.reddit.com/r/gnome/comments/v6fzaa/comment/ibfpk6n/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
+[And of course, RunCat](https://extensions.gnome.org/extension/2986/runcat/)
 
 ## Steam / Proton <br />
 ### Drive-Specific Issues <br />
 Some games refuse to work if they are not an ext4 drive (e.g. instead from a mounted NTFS drive).
 Affected Games (that I installed and had to move):
-- Borderlands GOTY
-- Plate Up
-- In Sink
+- [Borderlands GOTY](https://steamdb.info/app/729040/)
+- [Plate Up](https://steamdb.info/app/1599600/)
+- [In Sink](https://steamdb.info/app/1858650/)
 
 You should not mount drives to your home directory, mount them to /media or whatever, and symlink the drives to your `$HOME` directory.
 
 ### Proton commands <br />
 Write log: `PROTON_LOG=1 %command%`
 
+### Modding: Reshade
+There is a tool that lets you download the reshade mod and tells you which environment variables to add to your installation.
+[Github](https://github.com/kevinlekiller/reshade-steam-proton.git)
+
+<!-- 
 ### Game Specific Issues <br />
-#### Borderland GOTY <br />
+#### Borderland GOTY <br /> 
+-->
