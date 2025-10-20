@@ -1,4 +1,4 @@
-# >> (Community Scripts)[https://community-scripts.github.io/ProxmoxVE/scripts] <<
+# >> [Community Scripts](https://community-scripts.github.io/ProxmoxVE/scripts) <<
 # Pihole
 # Vaultwarden
 # Immich
