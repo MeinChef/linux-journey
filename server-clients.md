@@ -43,11 +43,14 @@ systemctl stop factorio
 ```
 ### Update the binary
 ```
-rm /opt/factorio/bin/x64/factorio
-wget -vO /opt/factorio/bin/x64/factorio https://factorio.com/get-download/stable/headless/linux64
-chmod +x /opt/factorio/bin/x64/factorio
+mkdir /opt/tmp
+wget -vO /opt/tmp/factorio.tar.xz https://factorio.com/get-download/stable/headless/linux64
+tar -xJf /opt/tmp/factorio.tar.xz -C /opt/tmp/
+rsync -rltv /opt/tmp/factorio /opt/factorio
+rm -rf /opt/tmp
 ```
 ### Sync Mods
+This is to be executed from a machine with all the mods in place, and their updates.
 ```
 rsync --delete --exclude-from=/home/$USER/.factorio/mod-exclude.txt -avze ssh /home/$USER/.factorio/mods/ user@example.com:/opt/factorio/mods/
 ```
