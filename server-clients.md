@@ -19,6 +19,35 @@ In the docker-compose.yml on your ML-Server, make sure you expand the line conta
 # Jellyfin
 # Navidrome
 # Factorio
+## Folder Structure
+```
+/opt/factorio/
+├── bin/
+│   └── x64/
+│       └── factorio          # Main Factorio executable (Linux 64-bit)
+│
+├── saves/
+│   ├── autosave_*.zip        # Auto-saves
+│   └── custom_name.zip       # Saved game
+│
+└── mods/
+    └── any_mod.zip
+```
+## Update Routine
+### Backup
+From the Proxmox interface start a backup.
+Ideally copy the save to a backup folder
+### Stop the Service
+```systemctl stop factorio```
+### Update the binary
+```rm /opt/factorio/bin/x64/factorio && wget -vO /opt/factorio/bin/x64/factorio https://factorio.com/get-download/stable/headless/linux64```
+### Sync Mods
+```rsync --delete --exclude-from=/home/$USER/.factorio/mod-exclude.txt -avze ssh /home/$USER/.factorio/mods/ user@example.com:/opt/factorio/mods/```
+### Permissions
+```chown -R factorio:factorio /opt/factorio```
+### Start the Service
+```systemctl start factorio```
+
 # Minecraft (Ubuntu)
 ## Why Ubuntu?
 Java. Newest Java version wasn't easily available on Debian, and thus Ubuntu had to resolve this.
