@@ -43,7 +43,9 @@ systemctl stop factorio
 ```
 ### Update the binary
 ```
-rm /opt/factorio/bin/x64/factorio && wget -vO /opt/factorio/bin/x64/factorio https://factorio.com/get-download/stable/headless/linux64
+rm /opt/factorio/bin/x64/factorio
+wget -vO /opt/factorio/bin/x64/factorio https://factorio.com/get-download/stable/headless/linux64
+chmod +x /opt/factorio/bin/x64/factorio
 ```
 ### Sync Mods
 ```
