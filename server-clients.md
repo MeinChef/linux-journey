@@ -36,17 +36,27 @@ In the docker-compose.yml on your ML-Server, make sure you expand the line conta
 ## Update Routine
 ### Backup
 From the Proxmox interface start a backup.
-Ideally copy the save to a backup folder
+Ideally copy the save to a backup folder.
 ### Stop the Service
-```systemctl stop factorio```
+```
+systemctl stop factorio
+```
 ### Update the binary
-```rm /opt/factorio/bin/x64/factorio && wget -vO /opt/factorio/bin/x64/factorio https://factorio.com/get-download/stable/headless/linux64```
+```
+rm /opt/factorio/bin/x64/factorio && wget -vO /opt/factorio/bin/x64/factorio https://factorio.com/get-download/stable/headless/linux64
+```
 ### Sync Mods
-```rsync --delete --exclude-from=/home/$USER/.factorio/mod-exclude.txt -avze ssh /home/$USER/.factorio/mods/ user@example.com:/opt/factorio/mods/```
+```
+rsync --delete --exclude-from=/home/$USER/.factorio/mod-exclude.txt -avze ssh /home/$USER/.factorio/mods/ user@example.com:/opt/factorio/mods/
+```
 ### Permissions
-```chown -R factorio:factorio /opt/factorio```
+```
+chown -R factorio:factorio /opt/factorio
+```
 ### Start the Service
-```systemctl start factorio```
+```
+systemctl start factorio
+```
 
 # Minecraft (Ubuntu)
 ## Why Ubuntu?
