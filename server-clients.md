@@ -45,6 +45,7 @@ systemctl stop factorio
 ```
 mkdir /opt/tmp
 wget -vO /opt/tmp/factorio.tar.xz https://factorio.com/get-download/stable/headless/linux64
+echo "$(wget -qO- https://factorio.com/download/sha256sums | head -n 20 | grep factorio-headless | awk '{print $1}') /opt/tmp/factorio.tar.xz" | sha256sum --check
 tar -xJf /opt/tmp/factorio.tar.xz -C /opt/tmp/
 rsync -rltv /opt/tmp/factorio /opt/factorio
 rm -rf /opt/tmp
