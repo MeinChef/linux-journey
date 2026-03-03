@@ -154,7 +154,7 @@ def infer_episode_nr(
 
 def infer_season(target: Path) -> str | bool:
     # search for at least one digit in the parent folder name
-    season = re.search(r"\d+", target.parent.name)
+    season = re.search(r"\d+", target.name)
     if season:
         return season.group().zfill(2) # to have seasons of naming scheme [01, 02, ...]
     return False
@@ -188,7 +188,7 @@ def main() -> None:
     )
     parser.add_argument("source", help = "The directory for the program to scan for files. If not in /opt/jellyfin/qbits, please provide the absolute path.")
     parser.add_argument("target", help = "The directory for the program to link the files found in source to. If not in /opt/jellyfin/, please provide the absolute path.")
-    parser.add_argument("-n", "--offset", help = "Specifies an integer offset that will be applied to the Episode number.")
+    parser.add_argument("-n", "--offset", help = "Specifies an integer offset that will be applied to the Episode number.", default = 0)
     parser.add_argument("-v", "--verbose", action = "store_true", help = "Increase verbosity.")
     parser.add_argument("-f", "--force", action = "store_true", help = "With this option enabled, the program will try to execute and ignore all safeguards. Not recommended.")
     args = parser.parse_args()
