@@ -2,8 +2,8 @@
 
 ---
 
-## GRUB <br />
-### GRUB not recognizing root <br />
+# GRUB <br />
+## GRUB not recognizing root <br />
 After I used Clonezilla to copy my installation from one HardDisk to another, 
 I also used this opportunity to put my /home folder into a different partition.
  
@@ -48,12 +48,12 @@ grub> boot
 This, however did not lead to me booting into the OS. The bootup got stuck, and threw me in the emergency console, from which I couldn't recover. (I assume because of non-correct /home or /root)
 
 
-### Using a live installation to recreate GRUB config files. <br />
+## Using a live installation to recreate GRUB config files. <br />
 I refused to give up on my installation, so I found myself browsing the forums, and stumbled upon [this thread](https://discussion.fedoraproject.org/t/repair-reinstall-grub-after-windows-11-update-dual-boot-fedora-f39/113155) <br />
 Here, I should boot a live-system to `chroot` into my original installation - basically bypassing GRUB.
 Doing all the steps correctly was not easy, and with the help from the thread I was able to actually change the root of my live-system to my original installation.
 
-#### Change the root of the live-system <br />
+### Change the root of the live-system <br />
 The following chain of commands were how I got there
 
 ```
@@ -121,16 +121,16 @@ A `sync && reboot` booted successfully!
 
 ---
 
-## System <br />
+# System <br />
 
-### Useful Aliases
+## Useful Aliases
 Just append them to `~/.bashrc`
 ```
 alias upndown='sudo dnf update && systemctl poweroff'
 alias update-grub='sudo grub2-mkconfig -o /etc/grub2.cfg'
 ```
 
-### Moving the installation across drives with clonezilla <br />
+## Moving the installation across drives with clonezilla <br />
 I used Linux now exclusively on my dual-boot machine with Windows for three months. 
 Deciding I want to get rid of Windows and use the prescious SSD space on my more write-endurable for my Linux instead.
 
@@ -168,8 +168,9 @@ See [Stackexchange](https://unix.stackexchange.com/questions/626969/fedora-33-ru
 [Or under section Gnome](#gnome-autostart)
 
 
-
-### fstab <br />
+---
+# Mounting drives
+## fstab <br />
 Use UUID. \
 Spaces in Folder/Drive names are `\040` \
 Useful Tags: 
@@ -183,7 +184,8 @@ Useful Tags:
 Especially with samba/cifs drives
 [Following this discussion](https://discussion.fedoraproject.org/t/suddenly-user-cifs-mounts-not-supported/78652/11)
 
-#### Using Systemd
+## Using Systemd
+### .mount
 Suppose you want to mount the cifs drive in `/home/user/Disks/Sambashare`.
 - create directory
 - create following files at /etc/systemd/system/
@@ -230,12 +232,45 @@ To enable the services, run
 # systemctl enable home-user-Disks-Sambashare.automount --now
 ```
 
+### .service
+Mounting network drives with FQDNs with VPN-tunnels does not quite work out.
+I nearly always got the error of 
+```
+mount.nfs: Failed to resolve server server.address.bar: Name or service not known
+```
+After playing around with depenencies, with no avail, I switched over to a service file.
+This allowed me to insert `ExecStartPre=/bin/sleep 10` which magically fixed all my issues.
+
+My full service file can be found below.
+Yes, there are probably too many dependencies in there, but never touch a running system.
+```
+[Unit]
+Description=Mount NAS via NFS
+After=network-online.target
+After=vpn.service
+After=NetworkManager-wait-online.service
+After=systemd-resolved.service
+Wants=network-online.target
+Requires=vpn.service
+Requires=NetworkManager-wait-online.service
+Requires=systemd-resolved.service
+
+[Service]
+Type=oneshot
+ExecStartPre=/bin/sleep 10
+ExecStart=/bin/mount -t nfs -o _netdev,auto,retry=10,timeo=60 server.netbird.cloud:/path/of/share /path/on/client
+ExecStop=/bin/umount /path/on/client
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+```
 
 ---
 
-## Gnome <br />
+# Gnome <br />
 
-### Must-Haves<br />
+## Must-Haves<br />
 
 **Gnome Tweaks** 
 An app that adds "Advanced Configuration Settings" (change fonts, themes, window behaviour, shell apperance, etc.)
@@ -251,21 +286,21 @@ Easiest to install via Gnome Software.
 
 <a name="gnome-autostart">
 
-### Autostart <br />
+## Autostart <br />
 
 </a>
 
 Autostarting apps, the easiest is to install [Gnome-Tweaks](#must-haves). 
 
-### Usericon
+## Usericon
 The user-icon on the lock-screen is located at `/var/lib/AccountService/icons`. The path to said icon is specified in `/var/lib/AccountService/user/`
 
-### Customization
+## Customization
 [A useful list of nice extensions](https://www.reddit.com/r/gnome/comments/v6fzaa/comment/ibfpk6n/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
 [And of course, RunCat](https://extensions.gnome.org/extension/2986/runcat/)
 
-## Steam / Proton <br />
-### Drive-Specific Issues <br />
+# Steam / Proton <br />
+## Drive-Specific Issues <br />
 Some games refuse to work if they are not an ext4 drive (e.g. instead from a mounted NTFS drive).
 Affected Games (that I installed and had to move):
 - [Borderlands GOTY](https://steamdb.info/app/729040/)
@@ -274,7 +309,7 @@ Affected Games (that I installed and had to move):
 
 You should not mount drives to your home directory, mount them to /media or whatever, and symlink the drives to your `$HOME` directory.
 
-### Fossilize
+## Fossilize
 Fossilize is a shader-pre caching tool that usually runs in the background, using some of your threads. For me the default was four threads.
 Since this wasn't enough for me, I had a look at various fixes on how to increase the fossilize threads and thus their speed.
 Apparently there is a way to set this as a steam-console parameter (not console parameter), but no straightforward way to have it apply every start.
@@ -298,7 +333,7 @@ alias fossilize='cat ~/.local/share/Steam/logs/shader_log.txt | grep Still | tai
 ### Proton commands <br />
 Write log: `PROTON_LOG=1 %command%`
 
-### Modding: Reshade
+## Modding: Reshade
 There is a tool that lets you download the reshade mod and tells you which environment variables to add to your installation.
 [Github](https://github.com/kevinlekiller/reshade-steam-proton.git)
 
