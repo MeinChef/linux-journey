@@ -299,6 +299,9 @@ The user-icon on the lock-screen is located at `/var/lib/AccountService/icons`. 
 [A useful list of nice extensions](https://www.reddit.com/r/gnome/comments/v6fzaa/comment/ibfpk6n/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
 [And of course, RunCat](https://extensions.gnome.org/extension/2986/runcat/)
 
+---
+
+
 # Steam / Proton <br />
 ## Drive-Specific Issues <br />
 Some games refuse to work if they are not an ext4 drive (e.g. instead from a mounted NTFS drive).
