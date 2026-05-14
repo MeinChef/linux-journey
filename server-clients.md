@@ -14,7 +14,28 @@ Log files: `/var/log/immich` (`web.log`, `ml.log`)
 - Make sure the permissions are correct (`chown -R user:group`)
 ## Setting up Remote ML
 In the docker-compose.yml on your ML-Server, make sure you expand the line containing `image: ...:${IMMICH_VERSION:-release}` with `-cuda` or whatever flavour of ML-Architecture you're using
+
 # Listmonk
+## Important files
+- `/opt/listmonk/bin/config.toml`
+- `/etc/systemd/system/listmonk.service`
+
+## Update Routine
+Go to the [latest release](https://github.com/knadh/listmonk/releases/latest) and grab the link to the `_amd64` version, and download it to `/opt/listmonk/tmp`
+
+```bash
+systemctl stop listmonk
+mkdir /opt/listmonk/tmp
+VERSION="<version>" curl -L -o /opt/listmonk/tmp/listmonk.tar.gz "https://github.com/knadh/listmonk/releases/download/v${VERSION}/listmonk_${VERSION}_amd64.tar.gz"
+tar -xvzf /opt/listmonk/tmp/listmonk.tar.gz -C /opt/listmonk/tmp/listmonk
+cp /opt/listmonk/tmp/listmonk/* /opt/listmonk/bin/
+chown listmonk:listmonk /opt/listmonk/bin/{LICENSE,README.md,listmonk}
+rm -rf /opt/listmonk/tmp
+/opt/listmonk/bin/listmonk --upgrade
+systemctl start listmonk
+```
+
+
 # Cockpit
 # Jellyfin
 # Navidrome
