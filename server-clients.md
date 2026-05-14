@@ -19,19 +19,20 @@ In the docker-compose.yml on your ML-Server, make sure you expand the line conta
 ## Important files
 - `/opt/listmonk/bin/config.toml`
 - `/etc/systemd/system/listmonk.service`
+- NGINX: `/etc/nginx/sites-available/foo.bar.baz`
 
 ## Update Routine
 Go to the [latest release](https://github.com/knadh/listmonk/releases/latest) and grab the link to the `_amd64` version, and download it to `/opt/listmonk/tmp`
 
 ```bash
 systemctl stop listmonk
-mkdir /opt/listmonk/tmp
+mkdir -p /opt/listmonk/tmp/listmonk
 VERSION="<version>" curl -L -o /opt/listmonk/tmp/listmonk.tar.gz "https://github.com/knadh/listmonk/releases/download/v${VERSION}/listmonk_${VERSION}_amd64.tar.gz"
 tar -xvzf /opt/listmonk/tmp/listmonk.tar.gz -C /opt/listmonk/tmp/listmonk
 cp /opt/listmonk/tmp/listmonk/* /opt/listmonk/bin/
 chown listmonk:listmonk /opt/listmonk/bin/{LICENSE,README.md,listmonk}
 rm -rf /opt/listmonk/tmp
-/opt/listmonk/bin/listmonk --upgrade
+cd /opt/listmonk/bin && ./listmonk --upgrade
 systemctl start listmonk
 ```
 
