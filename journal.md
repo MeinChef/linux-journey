@@ -334,7 +334,9 @@ alias fossilize='cat ~/.local/share/Steam/logs/shader_log.txt | grep Still | tai
 ```
 
 ### Proton commands <br />
-Write log: `PROTON_LOG=1 %command%`
+- Write log: `PROTON_LOG=1 %command%`
+- Game outputs: `%command >> logfile.txt`
+- `PROTON_VKD3D_HEAP=1` (The UE5 Memory Plug): Unreal Engine 5 is notorious for fragmenting VRAM pools under the VKD3D translation layer. For 8GB cards like the 5700 XT, this physically plugs the slow memory leak 
 
 ## Modding: Reshade
 There is a tool that lets you download the reshade mod and tells you which environment variables to add to your installation.
